@@ -13,7 +13,6 @@ object OutputView {
         }
         println()
     }
-
     // number는 로또 구매 갯수
     fun printWinStatistics(number: Int, winAndBonusCount: MutableList<Pair<Int, Int>>) {
         var threeCount = 0
@@ -21,27 +20,25 @@ object OutputView {
         var fiveCount = 0
         var fiveAndBonusCount = 0
         var sixCount = 0
-        val profitSum =
-            threeCount * 5000 + fourCount * 50000 + fiveCount * 1500000 + fiveAndBonusCount * 300000000 + sixCount * 2000000000
-        val profitRate = profitSum.toDouble() / number
-        println("당첨 통계\n---")
         for ((winCount, bonusCount) in winAndBonusCount) {
             when (winCount) {
                 3 -> threeCount++
                 4 -> fourCount++
                 5 -> if (bonusCount == 1)
-                    fiveAndBonusCount++
-                else
-                    fiveCount++
-
+                        fiveAndBonusCount++
+                    else
+                        fiveCount++
                 6 -> sixCount++
             }
         }
+        println("당첨 통계\n---")
         println("3개 일치 (5,000원) - ${threeCount}개")
         println("4개 일치 (50,000원) - ${fourCount}개")
         println("5개 일치 (1,500,000원) - ${fiveCount}개")
         println("5개 일치, 보너스 볼 일치 (30,000,000원) - ${fiveAndBonusCount}개")
         println("6개 일치 (2,000,000,000원) - ${sixCount}개")
-        println("총 수익률은 ${profitRate}%입니다.")
+        val profitSum = threeCount * 5000L + fourCount * 50000L + fiveCount * 1500000L + fiveAndBonusCount * 30000000L + sixCount * 2000000000L
+        val profitRate = profitSum.toDouble() / (number * 1000) * 100
+        println("총 수익률은 ${String.format("%.1f",profitRate)}%입니다.")
     }
 }
