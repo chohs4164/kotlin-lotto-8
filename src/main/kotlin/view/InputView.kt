@@ -44,7 +44,7 @@ object InputView {
     // 입력된 당첨 번호 검증
     fun validateWinNumber(inputWinNumber: String): Lotto {
         // 콤마를 구분자로 숫자들을 입력하지 않은 경우
-        if(!inputWinNumber.contains(",")){
+        if (!inputWinNumber.contains(",")) {
             throw IllegalArgumentException("[ERROR] 콤마(,)를 구분자로 숫자를 입력해주셔야합니다.")
         }
         // "," 제거한 문자 요소들
@@ -53,13 +53,9 @@ object InputView {
         if (inputWinNumber.isBlank()) {
             throw IllegalArgumentException("[ERROR] 당첨 번호를 입력 해주셔야 합니다.")
         }
-        // 당첨번호에 중복된 숫자가 있을 경우
-        for(index1 in 0 until parts.size) {
-            for(index2 in index1 until parts.size){
-                if(parts[index2] == parts[index1]){
-                    throw IllegalArgumentException("로또 번호에 중복된 숫자가 있습니다.")
-                }
-            }
+        // 당첨번호에 중복된 숫자가 있을 경우(distict를 통해 중복을 제거했음)
+        if (parts.size != parts.distinct().size) {
+            throw IllegalArgumentException("[ERROR] 로또 번호에 중복된 숫자가 있습니다.")
         }
         for (part in parts) {
             // 숫자가 아닌 값 입력 시
@@ -74,15 +70,16 @@ object InputView {
         val WinNumberList = parts.map { it.trim().toInt() }
         return Lotto(WinNumberList)
     }
+
     // 보너스 번호 입력
     fun readBonusNumber(inputWinNumber: Lotto): Int {
         println("보너스 번호를 입력해 주세요.")
         val inputBonusNumber = Console.readLine()
-        return validateBonusNumber(inputWinNumber,inputBonusNumber)
+        return validateBonusNumber(inputWinNumber, inputBonusNumber)
     }
 
     // 보너스 번호 검증
-    fun validateBonusNumber(inputWinNumber: Lotto,inputBonusNumber: String): Int {
+    fun validateBonusNumber(inputWinNumber: Lotto, inputBonusNumber: String): Int {
         // 공백 입력 시
         if (inputBonusNumber.isBlank()) {
             throw IllegalArgumentException("[ERROR] 보너스 번호를 입력 해주셔야 합니다!")
@@ -96,8 +93,8 @@ object InputView {
         }
         // 보너스 번호와 당첨 번호가 중복되는 경우
         val iterator = inputWinNumber.getNumbers()
-        for(number in iterator){
-            if(number == intInputBonusNumber){
+        for (number in iterator) {
+            if (number == intInputBonusNumber) {
                 throw IllegalArgumentException("[ERROR] 보너스 번호와 당첨 번호가 중복됩니다.")
             }
         }
