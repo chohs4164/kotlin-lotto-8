@@ -2,6 +2,7 @@ package controller
 
 
 import domain.LottoGenerator
+import domain.Rank
 import util.Validator
 import view.InputView
 import view.OutputView
@@ -22,10 +23,10 @@ class LottoController() {
             val inputWinNumber = InputView.readWinNumber()
             // 보너스 번호도 입력하고
             val inputBonusNumber = InputView.readBonusNumber(inputWinNumber)
-            // 몇 개 맞았는지 확인
-            val validateCount = Validator.validateNumber(lottos, inputWinNumber, inputBonusNumber)
-            OutputView.printWinStatistics(lottoCount, validateCount)
-        }catch (e: IllegalArgumentException){
+            // 몇 개 맞았는지 확인해서 등수 메기기
+            val ranks: List<Rank> = Validator.validateNumber(lottos, inputWinNumber, inputBonusNumber)
+            OutputView.printWinStatistics(lottoCount, ranks)
+        } catch (e: IllegalArgumentException) {
             println(e.message)
         }
     }
