@@ -1,6 +1,7 @@
 package view
 
 import camp.nextstep.edu.missionutils.Randoms
+import domain.Rank
 import lotto.Lotto
 
 object OutputView {
@@ -13,32 +14,24 @@ object OutputView {
         }
         println()
     }
+
     // number는 로또 구매 갯수
-    fun printWinStatistics(number: Int, winAndBonusCount: MutableList<Pair<Int, Int>>) {
-        var threeCount = 0
-        var fourCount = 0
-        var fiveCount = 0
-        var fiveAndBonusCount = 0
-        var sixCount = 0
-        for ((winCount, bonusCount) in winAndBonusCount) {
-            when (winCount) {
-                3 -> threeCount++
-                4 -> fourCount++
-                5 -> if (bonusCount == 1)
-                        fiveAndBonusCount++
-                    else
-                        fiveCount++
-                6 -> sixCount++
-            }
-        }
+    fun printWinStatistics(number: Int, ranks: List<Rank>) {
+        // 등수별 갯수 세기
+        val firstCount = ranks.count { it == Rank.FIRST }
+        val secondCount = ranks.count { it == Rank.SECOND }
+        val thirdCount = ranks.count { it == Rank.THIRD }
+        val fourthCount = ranks.count { it == Rank.FOURTH }
+        val fifthCount = ranks.count { it == Rank.FIFTH }
+
         println("당첨 통계\n---")
-        println("3개 일치 (5,000원) - ${threeCount}개")
-        println("4개 일치 (50,000원) - ${fourCount}개")
-        println("5개 일치 (1,500,000원) - ${fiveCount}개")
-        println("5개 일치, 보너스 볼 일치 (30,000,000원) - ${fiveAndBonusCount}개")
-        println("6개 일치 (2,000,000,000원) - ${sixCount}개")
-        val profitSum = threeCount * 5000L + fourCount * 50000L + fiveCount * 1500000L + fiveAndBonusCount * 30000000L + sixCount * 2000000000L
+        println("3개 일치 (5,000원) - ${fifthCount}개")
+        println("4개 일치 (50,000원) - ${fourthCount}개")
+        println("5개 일치 (1,500,000원) - ${thirdCount}개")
+        println("5개 일치, 보너스 볼 일치 (30,000,000원) - ${secondCount}개")
+        println("6개 일치 (2,000,000,000원) - ${firstCount}개")
+        val profitSum = ranks.sumOf { it.prize }
         val profitRate = profitSum.toDouble() / (number * 1000) * 100
-        println("총 수익률은 ${String.format("%.1f",profitRate)}%입니다.")
+        println("총 수익률은 ${String.format("%.1f", profitRate)}%입니다.")
     }
 }
